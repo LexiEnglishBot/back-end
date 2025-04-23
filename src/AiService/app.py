@@ -75,12 +75,12 @@ class OllamaClient:
 
 # === Example usage ===
 if __name__ == "__main__":
-    # client = OllamaClient(model="llama3")
-    client = OllamaClient(model="gemma:2b")
+    client = OllamaClient(model="llama3")
+    # client = OllamaClient(model="gemma:2b")
 
     # Pull a model
     print("Pulling model ...")
-    print(client.pull_model())
+    client.pull_model()
 
     # List available models
     print("Available models:")
@@ -106,10 +106,12 @@ In the wake of the terrorist attack on tourists at Baisaran, an off-the-road mea
     prompt = f"""
 In the long text I will write for you below, process the English words and provide an analysis of their difficulty or ease of learning for an average foreigner who is learning the language. No need for conjunctions such as from, to, to, etc.
 The response format should also be in TSV format, with each word in its key and value having these values:
-Difficulty level for learning from 1 to 10 - Meaning of the word in Persian - Example in a sentence - Meaning of the example in Persian - Learning in English - Related words up to 3 words in order of priority
 Extract result for all words in the text and do not say anything else. Just write the TSV from beggining of the response.
+
+Important: Difficulty level for learning from 1 to 10 - Meaning of the word in Persian - Example in a sentence - Meaning of the example in Persian - Learning in English - Related words up to 3 words in order of priority
+
 Text:
 {text_content}
 """
     result = client.generate(prompt)
-    print("The response:", result)
+    print("The response:\n", result)
