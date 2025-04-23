@@ -46,9 +46,14 @@ class OllamaClient:
                 yield l
 
     # === Model Management ===
-    def pull_model(self, model_name: str) -> dict:
+    def pull_model(self, model_name: str=None) -> dict:
         url = f"{self.base_url}/api/pull"
-        payload = {"name": model_name}
+
+        if model_name is not None:
+            payload = {"name": model_name}
+        else:
+            payload = {"name": self.model}
+
         response = requests.post(url, json=payload)
         response.raise_for_status()
         return response.ok
@@ -70,11 +75,12 @@ class OllamaClient:
 
 # === Example usage ===
 if __name__ == "__main__":
-    client = OllamaClient(model="llama3")
+    # client = OllamaClient(model="llama3")
+    client = OllamaClient(model="gemma:2b")
 
     # Pull a model
-    print("Pulling model 'llama3'...")
-    print(client.pull_model("llama3"))
+    print("Pulling model ...")
+    print(client.pull_model())
 
     # List available models
     print("Available models:")
@@ -99,9 +105,9 @@ In the wake of the terrorist attack on tourists at Baisaran, an off-the-road mea
 
     prompt = f"""
 In the long text I will write for you below, process the English words and provide an analysis of their difficulty or ease of learning for an average foreigner who is learning the language. No need for conjunctions such as from, to, to, etc.
-The response format should also be in json format, with each word in its key and value having these values:
+The response format should also be in TSV format, with each word in its key and value having these values:
 Difficulty level for learning from 1 to 10 - Meaning of the word in Persian - Example in a sentence - Meaning of the example in Persian - Learning in English - Related words up to 3 words in order of priority
-Extract result for all words in the text and dont say anything else. Just write the json and return it.
+Extract result for all words in the text and do not say anything else. Just write the TSV from beggining of the response.
 Text:
 {text_content}
 """
